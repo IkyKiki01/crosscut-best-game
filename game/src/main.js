@@ -1,11 +1,11 @@
 // Bootstrap and fixed 120 Hz simulation. Rendering never advances gameplay.
 import { Color, WebGLRenderer, PCFShadowMap, REVISION, Scene, FogExp2, PerspectiveCamera, ACESFilmicToneMapping, SRGBColorSpace, Vector2 } from "three";
-import { EffectComposer } from '../vendor/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from '../vendor/addons/postprocessing/RenderPass.js';
-import { GTAOPass } from '../vendor/addons/postprocessing/GTAOPass.js';
-import { UnrealBloomPass } from '../vendor/addons/postprocessing/UnrealBloomPass.js';
-import { SMAAPass } from '../vendor/addons/postprocessing/SMAAPass.js';
-import { OutputPass } from '../vendor/addons/postprocessing/OutputPass.js';
+import { EffectComposer } from '../vendor/addons/postprocessing/EffectComposer.min.js';
+import { RenderPass } from '../vendor/addons/postprocessing/RenderPass.min.js';
+import { GTAOPass } from '../vendor/addons/postprocessing/GTAOPass.min.js';
+import { UnrealBloomPass } from '../vendor/addons/postprocessing/UnrealBloomPass.min.js';
+import { SMAAPass } from '../vendor/addons/postprocessing/SMAAPass.min.js';
+import { OutputPass } from '../vendor/addons/postprocessing/OutputPass.min.js';
 import { createAtmosphere } from './atmosphere.js';
 import { createEffects } from './effects.js';
 import { PALETTE } from "./palette.js";

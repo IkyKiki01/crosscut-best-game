@@ -487,6 +487,11 @@
       #feed {
         text-shadow: 0 1px 4px #142c34;
       }
+      #buy { top: 17%; max-height: 78vh; overflow:auto; width: 560px; padding:20px 28px; }
+      #buy button { padding: 10px 18px; }
+      #scoreboard { position:absolute; z-index:30; top:20%; left:20%; width:60%; padding:28px; background:#142c34f2; border:1px solid #ffb84b; color:#dfdfcc; font:14px monospace; }
+      #scoreboard[hidden], #damage-bearing[hidden] { display:none; }
+      #damage-bearing { position:absolute; top:50%; left:50%; width:160px; height:160px; border-top:5px solid #ff7054; border-radius:50%; pointer-events:none; }
     </style>
   </head>
   <body>
@@ -515,7 +520,7 @@
       <div id="feed"></div>
       <div id="radar"><canvas id="radar-map" width="160" height="180"></canvas></div>
       <div id="controls">
-        WASD MOVE &nbsp; CTRL CROUCH &nbsp; R RELOAD &nbsp; G FRAG &nbsp; E PLANT &nbsp; B EQUIPMENT
+        WASD MOVE · SHIFT QUIET · CTRL CROUCH · R RELOAD · G FRAG · X SMOKE · F FLASH · E OBJECTIVE · B BUY · TAB SCORE
       </div>
       <div id="buy" hidden></div>
       <div id="damage-flash"></div>

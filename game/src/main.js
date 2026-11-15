@@ -10,7 +10,7 @@ import { createBots } from "./bots.js";
 import { createRounds } from "./rounds.js";
 import { createHud } from "./hud.js";
 import { createAudio } from "./audio.js";
-import { createBuy } from "./equipment.js";
+import { createBuy } from "./buy.js";
 import { createGrenades } from "./grenades.js";
 import { createObjective } from "./objective.js";
 import { createSimulation } from "./simulation.js";
@@ -29,7 +29,7 @@ const camera = new PerspectiveCamera(74, innerWidth / innerHeight, 0.05, 100);
 scene.add(camera);
 const world = createWorld(scene),
   audio = createAudio();
-const player = createPlayer(world, state),
+const player = createPlayer(world, state, audio),
   weapon = createWeapon(camera, state, world, random, audio);
 const bots = createBots(scene, state, world, random, audio);
 const objective = createObjective(state, audio),
@@ -82,4 +82,4 @@ syncCamera();
 requestAnimationFrame(frame);
 
 // Tooling entry: browser checks inspect the actual live state and rendered scene.
-window.crosscut = { state, camera, renderer, scene, rounds, weapon, objective, bots, player };
+window.crosscut = { state, camera, renderer, scene, rounds, weapon, objective, bots, player, grenades };

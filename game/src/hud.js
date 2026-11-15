@@ -1,3 +1,4 @@
+// Owns HUD, radar, damage bearing and scoreboard presentation from simulation state.
 import { WEAPONS } from "./equipment.js";
 import { PALETTE } from "./palette.js";
 // DOM presentation only; all timers and values come from the shared state.
@@ -23,6 +24,9 @@ export function createHud(state) {
     bannerCopy = byId("banner-copy"),
     status = byId("weapon-status");
   const radar = byId("radar-map").getContext("2d");
+  const board = document.createElement("div"), bearing = document.createElement("div");
+  board.id = "scoreboard"; bearing.id = "damage-bearing";
+  document.body.append(board, bearing);
   const objective = byId("objective"),
     armour = byId("armour"),
     feed = byId("feed");
@@ -30,10 +34,14 @@ export function createHud(state) {
     const w = state.weapon,
       seconds = Math.ceil(state.bomb.status === "planted" ? state.bomb.fuse : state.timer);
     const b = state.bomb;
-    armour.textContent = `ARMOUR ${Math.ceil(state.armour)} AP   /   FRAG ×${state.grenadeCount}`;
+    armour.textContent = `AP ${Math.ceil(state.armour)} / G FRAG ${state.grenadeCount} / X SMOKE ${state.smokeCount} / F FLASH ${state.flashCount}${state.kit ? " / KIT" : ""}`;
+    bearing.hidden = state.damageFlash <= 0;
+    bearing.style.transform = `translate(-50%,-50%) rotate(${state.damageAngle}rad)`;
+    board.hidden = !state.scoreboard;
+    if (state.scoreboard) board.innerHTML = `<h2>OPERATION / ROUND ${state.round}</h2><p>RAIDERS ${state.score.wins} : ${state.score.losses} SENTINELS</p><p>YOU · ${state.score.kills} KILLS · $${state.money}</p><hr>` + state.bots.map((bot,i)=>`<p>SENTINEL ${i+1} · ${bot.health>0 ? "ALIVE" : "DOWN"} · ${bot.buy} · ${bot.weapon} · $${bot.money} · ${bot.role}</p>`).join("");
     objective.textContent =
       b.status === "planted"
-        ? `CHARGE ACTIVE / ${b.site} / ${b.fuse.toFixed(1)}s  ${b.defuse > 0 ? "DEFUSING " + Math.floor((b.defuse / 7) * 100) + "%" : ""}`
+        ? `CHARGE ACTIVE / ${b.site} / ${b.fuse.toFixed(1)}s  ${b.defuse > 0 ? "DEFUSING " + Math.floor((b.defuse / (b.defuseDuration || 7)) * 100) + "%" : ""}`
         : b.plant > 0
           ? `PLANTING ${Math.floor((b.plant / 3) * 100)}% / HOLD E`
           : "SABOTAGE / PLANT AT A OR B · HOLD E";
@@ -101,7 +109,7 @@ export function createHud(state) {
           ? w.reserve
             ? "R · RELOAD"
             : "OUT OF AMMUNITION"
-          : WEAPONS[w.id].name.toUpperCase();
+          : w.mag <= 5 ? "LOW AMMO / R RELOAD" : WEAPONS[w.id].name.toUpperCase();
     const ended = state.phase === "won" || state.phase === "lost" || state.phase === "match";
     banner.hidden = (!ended && state.phase !== "buy" && state.phase !== "match") || state.buyOpen;
     bannerTitle.textContent = ended

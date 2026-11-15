@@ -19,6 +19,7 @@ export function createRounds(state, player, weapon, bots, objective, grenades) {
     grenades.reset();
   }
   function end(won) {
+    state.lastWon = won;
     state.phase = won ? "won" : "lost";
     state.timer = 6;
     if (won) state.score.wins++;

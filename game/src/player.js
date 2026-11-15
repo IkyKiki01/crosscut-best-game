@@ -14,7 +14,7 @@ const FRICTION = 9;
 const GRAVITY = 20;
 const JUMP_SPEED = 6.2;
 
-export function createPlayer(world, state) {
+export function createPlayer(world, state, audio) {
   const player = state.player;
   const wish = new Vector3();
   function overlaps(x, y, z, height, lift) {
@@ -112,6 +112,7 @@ export function createPlayer(world, state) {
       !player.crouching
     ) {
       state.footsteps = 0.4;
+      audio?.footstep(player.position.y > 0.3 || player.position.z < -9, keys.has("ShiftLeft") || keys.has("ShiftRight"));
       state.noise.x = player.position.x;
       state.noise.z = player.position.z;
       state.noise.radius = keys.has("ShiftLeft") ? 3 : 12;

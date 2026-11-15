@@ -17,6 +17,9 @@ export const ROUTES = [
   { name: "A site / turbine", nodes: [0, 1, 2, 3, 4, 3, 2, 1] },
   { name: "B site / capacitor", nodes: [9, 11, 10, 8, 6, 5, 6, 8, 10, 11] },
   { name: "Mid / crosscut", nodes: [7, 8, 6, 5, 4, 3, 2, 1, 0, 1] },
+  { name: "A / crosscut flank", nodes: [0, 1, 7, 8, 6, 5, 4, 3, 2, 1] },
+  { name: "B / mid flank", nodes: [9, 11, 10, 8, 7, 1, 7, 8, 10, 11] },
+  { name: "Mid / south control", nodes: [7, 8, 6, 5, 4, 3, 2, 1] },
 ];
 // BFS scratch storage is created once. Rotators route around the spine via the graph.
 const queue = new Int16Array(NODES.length),

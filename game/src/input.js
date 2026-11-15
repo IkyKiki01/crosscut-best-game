@@ -12,7 +12,7 @@ export function createInput(canvas, onLockChange) {
       down &&
       !event.repeat &&
       (event.code === "KeyB" ||
-        event.code === "KeyG" ||
+        event.code === "KeyG" || event.code === "KeyX" || event.code === "KeyF" ||
         event.code === "KeyR" ||
         event.code === "Enter" ||
         event.code.startsWith("Digit"))
@@ -20,7 +20,7 @@ export function createInput(canvas, onLockChange) {
       pressed.add(event.code);
     if (down) keys.add(event.code);
     else keys.delete(event.code);
-    if (state.locked && (event.code === "Space" || event.code.startsWith("Control"))) event.preventDefault();
+    if (event.code === "Tab" || (state.locked && (event.code === "Space" || event.code.startsWith("Control")))) event.preventDefault();
   }
 
   window.addEventListener("keydown", (event) => setKey(event, true));

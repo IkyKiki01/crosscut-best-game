@@ -1,6 +1,6 @@
 [
   { "name": "1-relay.jpg", "description": "East lane cover view with complete tactical HUD" },
   { "name": "2-contact.jpg", "description": "Live hitscan exchange and return fire" },
-  { "name": "3-requisition.jpg", "description": "Weapon, armour, ammunition and grenade buy menu" },
-  { "name": "4-charge.jpg", "description": "Planted charge at the turquoise tide relay" }
+  { "name": "3-requisition.jpg", "description": "Full buy menu with frag, smoke, flash and half-time defuse kit" },
+  { "name": "4-charge.jpg", "description": "Planted charge timer, smoke sight denial and elevated A-site catwalk" }
 ]

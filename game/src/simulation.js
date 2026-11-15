@@ -14,6 +14,7 @@ export function createSimulation(state, input, player, weapon, bots, rounds, buy
     input.lookX = 0;
     input.lookY = 0;
     buy.step(input.pressed);
+    state.scoreboard = input.keys.has("Tab");
     const active = state.health > 0 && !state.buyOpen && (state.phase === "buy" || state.phase === "live");
     if (active) player.step(dt, input.keys);
     weapon.step(dt);

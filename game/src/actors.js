@@ -1,3 +1,4 @@
+// Owns sentinel geometry and startup actor records.
 import {
   Group,
   Mesh,
@@ -58,6 +59,7 @@ export function createActors(scene, state) {
       left,
       right,
       flash,
+      gun,
       position: mesh.position,
       health: 100,
       mode: "patrol",

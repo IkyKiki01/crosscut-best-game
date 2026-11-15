@@ -50,5 +50,8 @@ export function createAudio() {
     hit() {
       tone(800, 0.035, 0.05, false);
     },
+    footstep(metal, quiet) {
+      tone(metal ? 420 : 90, quiet ? 0.006 : 0.018, metal ? 0.09 : 0.045, !metal);
+    },
   };
 }

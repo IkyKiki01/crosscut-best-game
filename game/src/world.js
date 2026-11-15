@@ -1,5 +1,5 @@
-import { createScenery } from "./scenery.js";
 // Map construction and allocation-free collision / sight queries.
+import { createScenery } from "./scenery.js";
 import {
   Vector3,
   Group,
@@ -44,6 +44,15 @@ export function createWorld(scene) {
   box(3, 1, 2, 5, 0.5, -11, "muted");
   box(3, 1, 1.5, -8, 0.5, 9, "muted");
   box(2, 1.2, 2, 10, 0.6, 10, "muted");
+  // West elevated service catwalk with walkable steps, low parapet and rail posts.
+  box(3, 1, 5, -14, 0.5, -13, "teal");
+  for (let i=0;i<10;i++) box(2, (i+1)*0.1, 0.4, -14, (i+1)*0.05, -6.9-i*0.4, "hairline");
+  box(0.15, 0.6, 5, -15.4, 1.3, -13, "muted");
+  for (let i=0;i<5;i++) box(0.08, 1, 0.08, -15.4, 1.5, -15+i, "ink");
+  box(0.1, 0.1, 5, -15.4, 2, -13, "accent");
+  // Low blast wall and corrugated container preserve both crosscut chokepoints.
+  box(4, 0.8, 0.5, -8, 0.4, 2, "teal");
+  box(2.4, 2.5, 4, 12, 1.25, 5, "rust");
   // A shallow stepped ramp reaches the rear observation deck; each rise is walkable.
   box(6, 1, 3, 8, 0.5, -16.2);
   for (let i = 0; i < 10; i++) box(3, (i + 1) * 0.1, 0.4, 8, (i + 1) * 0.05, -10.9 - i * 0.4, "hairline");
@@ -60,6 +69,7 @@ export function createWorld(scene) {
   sun.shadow.mapSize.set(1024, 1024);
   Object.assign(sun.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, far: 70 });
   sun.shadow.bias = -0.0005;
+  sun.shadow.radius = 3;
   scene.add(sun);
   const scenery = createScenery(scene);
   const probe = new Box3(),

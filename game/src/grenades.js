@@ -1,25 +1,43 @@
-import { Vector3, Mesh, SphereGeometry, MeshStandardMaterial, MeshBasicMaterial } from "three";
+// Owns pooled grenade flight, smoke volumes, flash bursts and fragmentation damage.
+import { Vector3, Mesh, SphereGeometry, MeshStandardMaterial, MeshBasicMaterial, Group, Sprite, SpriteMaterial, CanvasTexture } from "three";
+import { flashBots } from "./visibility.js";
 import { PALETTE } from "./palette.js";
 export function createGrenades(scene, state, world, audio) {
   // Fixed pool: throwing, physics and blast effects allocate no objects during simulation.
-  for (let i = 0; i < 4; i++) {
+  const scratch = new Vector3();
+  const canvas = document.createElement("canvas"); canvas.width = canvas.height = 128;
+  const ctx = canvas.getContext("2d"), gradient = ctx.createRadialGradient(64,64,8,64,64,64);
+  gradient.addColorStop(0,"rgba(177,193,189,1)"); gradient.addColorStop(0.55,"rgba(177,193,189,.95)"); gradient.addColorStop(1,"rgba(177,193,189,0)");
+  ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
+  const smokeTexture = new CanvasTexture(canvas);
+  for (let i = 0; i < 8; i++) {
     const mesh = new Mesh(new SphereGeometry(0.1, 8, 6), new MeshStandardMaterial({ color: PALETTE.accent }));
     scene.add(mesh);
     mesh.visible = false;
     const blast = new Mesh(
-      new SphereGeometry(1, 12, 8),
+      new SphereGeometry(1, 24, 16),
       new MeshBasicMaterial({ color: PALETTE.accent, transparent: true, opacity: 0.25, depthWrite: false }),
     );
     scene.add(blast);
     blast.visible = false;
-    state.grenades.push({ mesh, blast, velocity: new Vector3(), active: false, fuse: 0, glow: 0 });
+    const cloud = new Group(), smokeMaterial = new SpriteMaterial({map:smokeTexture,depthWrite:false,opacity:0.95});
+    for(let j=0;j<9;j++) {
+      const puff=new Sprite(smokeMaterial); const a=j*2.4;
+      puff.position.set(Math.cos(a)*2.2, (j%3)*0.7-0.7, Math.sin(a)*2.2);puff.scale.set(5,4.5,1);cloud.add(puff);
+    }
+    scene.add(cloud);cloud.visible=false;
+    state.grenades.push({ mesh, blast, cloud, smokeMaterial, velocity: new Vector3(), active: false, fuse: 0, glow: 0 });
   }
   function step(dt, keys) {
-    if (keys.delete("KeyG") && state.phase === "live" && state.health > 0 && state.grenadeCount > 0) {
+    const kind = keys.delete("KeyX") ? "smoke" : keys.delete("KeyF") ? "flash" : keys.delete("KeyG") ? "frag" : "";
+    const inventory = kind === "smoke" ? "smokeCount" : kind === "flash" ? "flashCount" : "grenadeCount";
+    if (kind && state.phase === "live" && state.health > 0 && state[inventory] > 0) {
       for (let i = 0; i < state.grenades.length; i++) {
         const g = state.grenades[i];
-        if (g.active) continue;
-        state.grenadeCount--;
+        if (g.active || g.glow > 0) continue;
+        state[inventory]--;
+        g.kind = kind;
+        g.throwX = -Math.sin(state.player.yaw); g.throwZ = -Math.cos(state.player.yaw);
         g.active = true;
         g.fuse = 1.8;
         g.mesh.visible = true;
@@ -36,8 +54,13 @@ export function createGrenades(scene, state, world, audio) {
     for (let i = 0; i < state.grenades.length; i++) {
       const g = state.grenades[i];
       g.glow = Math.max(0, g.glow - dt);
-      g.blast.visible = g.glow > 0;
-      g.blast.scale.setScalar(1 + (1 - g.glow / 0.4) * 5);
+      g.blast.visible = g.glow > 0 && g.kind !== "smoke";
+      g.cloud.visible = g.glow > 0 && g.kind === "smoke";
+      g.cloud.position.copy(g.blast.position);
+      g.cloud.rotation.y = state.elapsed*0.07;
+      g.smokeMaterial.opacity = Math.min(0.95,g.glow*0.6);
+      g.blast.scale.setScalar(g.kind === "smoke" ? 4 : 1 + (1 - g.glow / 0.4) * 5);
+      g.blast.material.opacity = g.kind === "smoke" ? Math.min(0.94, g.glow * 0.8) : 0.25;
       if (!g.active) continue;
       g.fuse -= dt;
       g.velocity.y -= 18 * dt;
@@ -63,6 +86,13 @@ export function createGrenades(scene, state, world, audio) {
         g.mesh.visible = false;
         g.glow = 0.4;
         g.blast.position.copy(p);
+        if (g.kind === "smoke") {
+          g.glow = 14; g.blast.position.y = 1.5;
+          g.blast.material.color.set("#b1c1bd");
+          continue;
+        }
+        g.blast.material.color.set(g.kind === "flash" ? "#ffffff" : PALETTE.accent);
+        if (g.kind === "flash") { flashBots(state, g, world, scratch); audio.hit(); continue; }
         audio.shot(true);
         state.noise.x = p.x;
         state.noise.z = p.z;
@@ -97,6 +127,7 @@ export function createGrenades(scene, state, world, audio) {
         g.mesh.visible = false;
         g.glow = 0;
         g.blast.visible = false;
+        g.cloud.visible = false;
       }
     },
   };

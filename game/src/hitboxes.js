@@ -1,3 +1,4 @@
+// Owns allocation-free body capsule and head sphere hit queries.
 import { Ray, Sphere, Vector3 } from "three";
 // Reusable query scratch: neither head-sphere nor body-capsule tests allocate while firing.
 export function createHitboxes() {

@@ -33,15 +33,22 @@ export function createObjective(state, audio) {
     } else if (b.status === "planted") {
       b.fuse = Math.max(0, b.fuse - dt);
       let defusing = false;
+      let kit = false;
+      let selected = false;
       for (let i = 0; i < state.bots.length; i++) {
         const bot = state.bots[i];
-        if (bot.health > 0 && Math.hypot(bot.position.x - b.x, bot.position.z - b.z) < 1.8 && bot.mode !== "engage") {
+        if (!selected && bot.health > 0 && !bot.visibleEnemy && !bot.blind && Math.hypot(bot.position.x - b.x, bot.position.z - b.z) < 1.8 && bot.mode !== "engage") {
           defusing = true;
+          selected = true;
+          kit = bot.kit;
           bot.mode = "defuse";
         }
       }
+      // Field kit can also recover a planted charge with E; defenders buy their own kits.
+      if (state.kit && keys.has("KeyE") && state.health > 0 && Math.hypot(p.x-b.x,p.z-b.z)<1.8) { defusing=true; kit=true; }
+      b.defuseDuration = kit ? 3.5 : 7;
       b.defuse = defusing ? b.defuse + dt : 0;
-      if (b.defuse >= 7) b.status = "defused";
+      if (b.defuse >= b.defuseDuration) b.status = "defused";
       else if (b.fuse === 0) {
         b.status = "exploded";
         audio.shot(true);

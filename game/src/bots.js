@@ -2,7 +2,8 @@
 import { Vector3 } from "three";
 import { createActors } from "./actors.js";
 import { createHitboxes } from "./hitboxes.js";
-import { nextNode } from "./navigation.js";
+import { equipBot, retake } from "./tactics.js";
+import { smokeBlocks } from "./visibility.js";
 export function createBots(scene, state, world, random, audio) {
   const eye = new Vector3(),
     target = new Vector3(),
@@ -12,13 +13,14 @@ export function createBots(scene, state, world, random, audio) {
   function reset() {
     for (let i = 0; i < state.bots.length; i++) {
       const b = state.bots[i];
+      equipBot(b, i, state);
       b.position.set(b.route[0], 0, b.route[1]);
       // Cycle duties each round while retaining each sentinel's named lane route.
       const duty = (i + state.round - 1) % 3;
       b.role = duty === 0 ? "rusher" : duty === 1 ? "holder" : "rotator";
       b.navigating = false;
       b.health = 100;
-      b.armour = 50;
+      b.armour = b.buy === "ECO" ? 0 : b.buy === "FORCE" ? 35 : 100;
       b.still = 0;
       b.hold = 0;
       b.mode = "patrol";
@@ -63,23 +65,17 @@ export function createBots(scene, state, world, random, audio) {
         continue;
       }
       if (state.phase !== "live") continue;
+      b.blind = Math.max(0, b.blind - dt);
+      if (b.blind > 0) { b.visibleEnemy = false; b.mode = "blinded"; move(b, b.route[0], b.route[1], dt, 1.4); continue; }
       b.cooldown -= dt;
       b.still = b.mode === "engage" || b.mode === "hold" ? Math.min(2, b.still + dt) : 0;
       const bomb = state.bomb;
-      if (bomb.status === "planted" && b.mode !== "engage") {
-        b.mode = "rotate";
-        if (!b.navigating || Math.hypot(b.position.x - b.navX, b.position.z - b.navZ) < 0.25) {
-          const n = nextNode(b.position.x, b.position.z, bomb.x, bomb.z);
-          b.navX = n.x;
-          b.navZ = n.z;
-          b.navigating = true;
-        }
-        const distanceToCharge = Math.hypot(b.position.x - bomb.x, b.position.z - bomb.z);
-        if (distanceToCharge > 1.5) {
-          if (distanceToCharge < 3) move(b, bomb.x, bomb.z, dt, 2.7);
-          else move(b, b.navX, b.navZ, dt, 2.7);
-        }
+      if (bomb.status === "planted" && !b.retakeStarted) { b.retakeStarted = true; b.retreatLeft = 0.9; }
+      if (b.retreatLeft > 0) {
+        b.retreatLeft -= dt; b.mode = "retreat"; b.visibleEnemy = false;
+        move(b, b.route[2], b.route[3], dt, 3.2); continue;
       }
+      if (bomb.status === "planted" && b.mode !== "engage") retake(b, i, state, dt, move);
       const noise = state.noise;
       if (
         noise.time > 0 &&
@@ -101,7 +97,9 @@ export function createBots(scene, state, world, random, audio) {
         state.health > 0 &&
         distance < 31 &&
         (facing > 0.25 || b.mode === "engage" || distance < 3) &&
+        !smokeBlocks(state, eye, direction, distance) &&
         world.wallDistance(eye, direction, distance) >= distance - 0.02;
+      b.visibleEnemy = visible;
       if (visible) {
         b.navigating = false;
         b.lost = 0;
@@ -135,13 +133,20 @@ export function createBots(scene, state, world, random, audio) {
             state.armour -= absorbed;
             state.health = Math.max(0, state.health - (12 - absorbed));
             state.damageFlash = 0.3;
+            state.damageAngle = Math.atan2(b.position.x-p.position.x,b.position.z-p.position.z) + p.yaw;
+            if (state.health === 0) { state.message = `SENTINEL / ${b.weapon} / YOU`; state.messageTime = 4; }
           }
           b.burst--;
-          b.cooldown = b.burst > 0 ? 0.15 : 0.9 + random() * 0.6;
+          b.cooldown = b.buy === "ECO" ? 0.65 : b.burst > 0 ? 0.15 : 0.9 + random() * 0.6;
           if (!b.burst) b.burst = 3;
         }
       } else {
         b.lost += dt;
+        if (smokeBlocks(state, eye, direction, distance) && bomb.status !== "planted") {
+          b.mode = b.role === "rusher" ? "smoke-push" : "hold";
+          if (b.role === "rusher") move(b, b.route[b.waypoint*2], b.route[b.waypoint*2+1], dt, 1.5);
+          continue;
+        }
         if ((b.mode === "engage" || b.mode === "alert" || b.mode === "take-cover") && b.lost < 2.5) {
           b.mode = "alert";
           move(b, b.lastX, b.lastZ, dt, 2);
@@ -186,7 +191,7 @@ export function createBots(scene, state, world, random, audio) {
     state.hit = 0.14;
     audio.hit();
     if (selected.health <= 0) {
-      state.message = `YOU  /  ${headshot ? "HEADSHOT" : "ELIMINATION"}  /  SENTINEL`;
+      state.message = `YOU  /  ${weapon.name} ${headshot ? " / HEADSHOT" : ""}  /  SENTINEL`;
       state.messageTime = 4;
       selected.mode = "dead";
       state.score.kills++;

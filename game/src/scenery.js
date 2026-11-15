@@ -1,3 +1,4 @@
+// Owns authored industrial dressing, canvas wayfinding, site lamps and charge presentation.
 import {
   Mesh,
   BoxGeometry,
@@ -8,6 +9,7 @@ import {
   PlaneGeometry,
   DoubleSide,
   Group,
+  PointLight,
 } from "three";
 import { PALETTE } from "./palette.js";
 // Original tidal relay architecture: turbine crowns and suspended copper transmission bus.
@@ -44,6 +46,7 @@ export function createScenery(scene) {
     m.position.set(x, y, z);
     m.rotation.y = rotation;
     scene.add(m);
+    return m;
   }
   // Site floor mats and painted outlines, with distinct hardware and signage.
   for (let site = 0; site < 2; site++) {
@@ -58,11 +61,19 @@ export function createScenery(scene) {
       block(0.12, 0.02, 1.7, x + dx, 0.05, z + dz * 0.75, c);
     }
     label(site ? "B / COIL" : "A / TIDE", x, 3.5, -17.7, c, 1.4);
+    const lamp = new PointLight(site ? "#ff9454" : "#ffe1a1", 65, 14, 2);
+    lamp.position.set(x, 3, z); scene.add(lamp);
+    block(1.2, 0.12, 0.3, x, 3.8, -17.4, "accent");
+    const marking = label(site ? "B / COIL" : "A / TIDE", x, 0.065, z+1, c, 0.85);
+    marking.rotation.x = -Math.PI/2;
     block(2.1, 1.7, 1.4, x + 2, 0.85, z - 1, c);
     for (let k = 0; k < 5; k++) block(1.7, 0.08, 0.04, x + 2, 0.45 + k * 0.22, z - 0.27, "dark");
     block(1.1, 0.08, 0.8, x + 2, 1.74, z - 1, "ink");
   }
   label("CROSSCUT", 0, 5, -17.72, "accent", 1.2);
+  label("01 / TIDE", -8, 3, 17.72, "teal", 0.8, Math.PI);
+  label("03 / COIL", 15.7, 3, 5, "rust", 0.7, -Math.PI/2);
+  for(let i=0;i<10;i++) block(0.05,2.3,0.12,10.77,1.25,3.2+i*0.38,"accent");
   label("02 / MID", 1.53, 2.9, 1, "accent", 0.75, Math.PI / 2);
   label("RELAY 07", -15.7, 3, 5, "teal", 1, -Math.PI / 2);
   label("B  >", 6, 2.9, 17.72, "rust", 0.8, Math.PI);

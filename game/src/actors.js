@@ -37,9 +37,9 @@ export function createActors(scene, state) {
       new BoxGeometry(0.48, 0.49, 0.23),
       new MeshStandardMaterial({ color: PALETTE.rust, roughness: 0.8 }),
     );
-    vest.position.set(0, 1.06, -0.18);
+    vest.position.set(0, 1.06, -0.30);
     const visor = new Mesh(new BoxGeometry(0.31, 0.1, 0.13), darkMat);
-    visor.position.set(0, 1.68, -0.17);
+    visor.position.set(0, 1.68, -0.23);
     const armGeo = new BoxGeometry(0.17, 0.49, 0.18),
       armL = new Mesh(armGeo, bodyMat),
       armR = new Mesh(armGeo, bodyMat);

@@ -13,6 +13,9 @@ export function createBots(scene, state, world, random, audio) {
     for (let i = 0; i < state.bots.length; i++) {
       const b = state.bots[i];
       b.position.set(b.route[0], 0, b.route[1]);
+      // Cycle duties each round while retaining each sentinel's named lane route.
+      const duty = (i + state.round - 1) % 3;
+      b.role = duty === 0 ? "rusher" : duty === 1 ? "holder" : "rotator";
       b.navigating = false;
       b.health = 100;
       b.armour = 50;

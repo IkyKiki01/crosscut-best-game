@@ -1,4 +1,11 @@
-// Owns weapon definitions for purchase, damage, handling and capacity.
+// equipment.js — owns the weapon catalogue: names, prices, magazine and
+// reserve capacity, damage profile, cadence, reload time and recoil feel.
+
+/**
+ * Weapon definitions keyed by weapon id. Field names are consumed by buy.js,
+ * weapon.js and hud.js, so the shape here is part of the interface.
+ * @type {Record<string, {name: string, price: number, magazine: number, reserve: number, damage: number, head: number, gap: number, reload: number, recoil: number, spread: number, pellets: number}>}
+ */
 export const WEAPONS = {
   rifle: {
     name: "Kestrel / rifle",

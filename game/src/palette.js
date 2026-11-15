@@ -1,4 +1,12 @@
-// Owns the tidal station color palette shared by scene and HUD.
+// palette.js — owns the tidal-station colour vocabulary shared by the scene,
+// the scenery dressing, the particle systems and the DOM HUD.
+
+/**
+ * Single source of truth for every colour the game draws with.
+ * Keys are also used as material names by world.js and scenery.js, so the
+ * insertion order here is part of the rendering contract.
+ * @type {Record<string, string>}
+ */
 export const PALETTE = {
   canvas: "#789ca7",
   surface: "#264851",

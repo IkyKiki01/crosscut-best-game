@@ -1,5 +1,6 @@
 // Map construction and allocation-free collision / sight queries.
 import { createScenery } from "./scenery.js";
+import { surface } from './textures.js';
 import {
   Vector3,
   Group,
@@ -18,7 +19,7 @@ export function createWorld(scene) {
     group = new Group();
   scene.add(group);
   for (const name of Object.keys(PALETTE))
-    materials[name] = new MeshStandardMaterial({ color: PALETTE[name], roughness: 0.85 });
+    materials[name] = surface(name, name==='muted'?'wood':name==='rust'||name==='teal'?'metal':name==='hairline'?'floor':'concrete',name==='hairline'?14:3);
   function box(w, h, d, x, y, z, color = "surface") {
     const mesh = new Mesh(new BoxGeometry(w, h, d), materials[color]);
     mesh.position.set(x, y, z);
@@ -62,11 +63,11 @@ export function createWorld(scene) {
     mesh.position.set(4, 0.012, z);
     group.add(mesh);
   }
-  scene.add(new HemisphereLight(PALETTE.ink, PALETTE.canvas, 1.5));
-  const sun = new DirectionalLight(PALETTE.ink, 2.4);
-  sun.position.set(12, 22, 10);
+  scene.add(new HemisphereLight('#b6d9ec', PALETTE.dark, 1.3));
+  const sun = new DirectionalLight('#ffe1ab', 3.1);
+  sun.position.set(-15, 23, 8);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(2048, 2048);
   Object.assign(sun.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, far: 70 });
   sun.shadow.bias = -0.0005;
   sun.shadow.radius = 3;

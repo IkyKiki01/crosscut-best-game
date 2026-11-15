@@ -7,6 +7,8 @@ import {
   CapsuleGeometry,
   SphereGeometry,
   BoxGeometry,
+  CylinderGeometry,
+  CircleGeometry,
 } from "three";
 import { PALETTE } from "./palette.js";
 import { ROUTES, NODES } from "./navigation.js";
@@ -23,7 +25,7 @@ export function createActors(scene, state) {
     const mesh = new Group();
     const body = new Mesh(bodyGeo, bodyMat);
     body.position.y = 1;
-    const head = new Mesh(headGeo, headMat);
+    const head = new Mesh(headGeo, darkMat);
     head.position.y = 1.65;
     const gun = new Mesh(gunGeo, darkMat);
     gun.position.set(0.28, 1.2, -0.36);
@@ -50,8 +52,18 @@ export function createActors(scene, state) {
     const badge = new Mesh(new BoxGeometry(0.13, 0.05, 0.02), headMat);
     badge.position.set(-0.1, 1.18, -0.31);
     mesh.add(body, head, gun, left, right, flash, vest, visor, armL, armR, badge);
+    const lens=new Mesh(new BoxGeometry(.26,.045,.025),new MeshStandardMaterial({color:PALETTE.teal,metalness:.65,roughness:.15}));
+    lens.position.set(0,1.69,-.302);mesh.add(lens);
+    for(const x of [-.15,0,.15]) {
+      const pouch=new Mesh(new BoxGeometry(.12,.19,.085),darkMat);pouch.position.set(x,1.03,-.44);mesh.add(pouch);
+    }
+    const pack=new Mesh(new BoxGeometry(.4,.43,.18),darkMat);pack.position.set(0,1.08,.24);mesh.add(pack);
+    const barrel=new Mesh(new CylinderGeometry(.024,.024,.35,8),bodyMat);barrel.rotation.x=Math.PI/2;barrel.position.set(.28,1.23,-.82);mesh.add(barrel);
+    for(const x of [-.17,.17]) {const boot=new Mesh(new BoxGeometry(.21,.17,.33),bodyMat);boot.position.set(x,.1,-.035);mesh.add(boot);}
+    const shadow=new Mesh(new CircleGeometry(.42,16),new MeshBasicMaterial({color:PALETTE.dark,transparent:true,opacity:.3,depthWrite:false}));
+    shadow.rotation.x=-Math.PI/2;shadow.position.y=.014;mesh.add(shadow);
     mesh.traverse((o) => {
-      if (o.isMesh) o.castShadow = true;
+      if (o.isMesh) o.receiveShadow = true;
     });
     scene.add(mesh);
     state.bots.push({

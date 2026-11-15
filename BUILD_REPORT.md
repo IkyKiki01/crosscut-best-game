@@ -1,5 +1,7 @@
 # CROSSCUT quality pass
 
+Historical gameplay pass report. The subsequent rendering overhaul and its final checks are documented in [VISUAL_REPORT.md](VISUAL_REPORT.md).
+
 The tactical pass adds three pooled grenade types: G fragmentation, X smoke (14 seconds of sight denial), and F flash (a forward cone that blinds bots for 3 seconds). Smoke intersects the bot's actual sight segment; holders stop and rushers push slowly. Flash clears target visibility and forces reaction delay on reacquisition. Smoke uses generated radial canvas textures and pooled puffs.
 
 Bot budgets persist between rounds. Eco/force/full cycles are gated by available money; buys change weapon silhouette, firing cadence, armour and kit ownership. Six patrol routes provide two approaches per site and mid control. Planted charges trigger a brief retreat, graph-based rotation, angle holding and a single nearby defuser. Visible enemies interrupt defusing. A $400 kit halves the seven-second defuse duration to 3.5 seconds; the field kit also permits charge recovery with E. The HUD shows fuse seconds and defuse progress.

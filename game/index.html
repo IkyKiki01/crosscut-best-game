@@ -93,6 +93,7 @@
       }
       #hitmarker.on {
         opacity: 1;
+        transition: none;
       }
       #hitmarker i {
         position: absolute;
@@ -492,6 +493,18 @@
       #scoreboard { position:absolute; z-index:30; top:20%; left:20%; width:60%; padding:28px; background:#142c34f2; border:1px solid #ffb84b; color:#dfdfcc; font:14px monospace; }
       #scoreboard[hidden], #damage-bearing[hidden] { display:none; }
       #damage-bearing { position:absolute; top:50%; left:50%; width:160px; height:160px; border-top:5px solid #ff7054; border-radius:50%; pointer-events:none; }
+      #hud { background:radial-gradient(ellipse at center, transparent 48%, #07182055 100%); }
+      #topbar { background:linear-gradient(110deg,#10262eea,#18343ddd); border:1px solid #b3c7c52e; border-top:2px solid #ffb84b; }
+      #radar { background:#0d242be0; border-top:2px solid #42c5bf; box-shadow:0 8px 30px #07182055; }
+      #health, #ammo { filter:drop-shadow(0 2px 5px #071820); }
+      #buy { left:50%;transform:translateX(-50%);top:15%;width:760px;max-width:94vw;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;background:linear-gradient(120deg,#112b33f0,#0c1c25f0);backdrop-filter:blur(14px);border:1px solid #8dacae65;border-top:3px solid #ffb84b;box-shadow:0 25px 100px #0009; }
+      #buy h2, #buy p { grid-column:1/-1; }
+      #buy h2 { font-size:25px;font-weight:500;letter-spacing:.16em; }
+      #buy h2::before { content:'07 / LOGISTICS';display:block;font:10px monospace;letter-spacing:.25em;color:#42c5bf;margin-bottom:12px; }
+      #buy p { margin:0 0 12px;line-height:1.7; }
+      #buy button { min-height:57px;margin:0;padding:14px;font-size:12px;background:linear-gradient(110deg,#2c454d90,#21373d50);border:1px solid #7a989b40;border-left:2px solid #42c5bf;align-items:center;text-align:left;gap:12px; }
+      #buy button b { color:#ffb84b;white-space:nowrap; }
+      body:has(#buy:not([hidden])) #game { filter:blur(5px); }
     </style>
   </head>
   <body>

@@ -24,18 +24,24 @@ export function createWeapon(camera, game, world, random, audio) {
     model.position.z = -0.42 + state.kick;
     model.rotation.x = state.kick * 2.2;
     model.rotation.z = 0;
+    const speed = Math.hypot(game.player.velocity.x,game.player.velocity.z);
+    model.position.x = .24 + Math.sin(game.elapsed*1.8)*.004 + Math.sin(game.elapsed*9)*Math.min(speed,.8)*.008;
+    model.position.y = -.2 + Math.cos(game.elapsed*18)*Math.min(speed,1)*.006;
+    model.rotation.y = Math.sin(game.elapsed*1.8)*.008;
     magazine.position.y = -0.12;
+    magazine.rotation.z = 0;
     hand.position.y = -0.29;
     flash.visible = state.flash > 0;
     flash.rotation.z = state.flash * 30;
-    flashLight.intensity = state.flash > 0 ? 18 : 0;
+    flashLight.intensity = state.flash > 0 ? 4 : 0;
     if (state.reloadLeft > 0) {
       state.reloadLeft = Math.max(0, state.reloadLeft - dt);
       model.rotation.x = -0.55 * Math.min(1, (WEAPONS[state.id].reload - state.reloadLeft) * 2);
       const progress = 1-state.reloadLeft/WEAPONS[state.id].reload;
       const arc = Math.sin(progress*Math.PI);
       model.rotation.z = -0.4*arc;
-      magazine.position.y = -0.12-0.28*arc;
+      magazine.position.y = -0.12-0.45*arc;
+      magazine.rotation.z = .25*arc;
       hand.position.y = -0.29-0.15*arc;
       if (state.reloadLeft === 0) {
         const need = WEAPONS[state.id].magazine - state.mag;
@@ -76,7 +82,12 @@ export function createWeapon(camera, game, world, random, audio) {
           .addScaledVector(up, (random() - 0.5) * 0.09)
           .normalize();
       }
-      bots.hit(origin, direction, world.wallDistance(origin, direction), WEAPONS[state.id]);
+      const wall = world.wallDistance(origin, direction);
+      const hitPoint = bots.hit(origin, direction, wall, WEAPONS[state.id]);
+      const end = hitPoint || origin.clone().addScaledVector(direction,wall);
+      const muzzle = new Vector3(.24,-.16,-1).applyMatrix4(camera.matrixWorld);
+      world.effects?.shot(muzzle,end);
+      if (!hitPoint && wall < 100) world.effects?.burst(end);
     }
     game.noise.x = origin.x;
     game.noise.z = origin.z;

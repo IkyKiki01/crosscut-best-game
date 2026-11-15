@@ -10,13 +10,15 @@ import {
   DoubleSide,
   Group,
   PointLight,
+  SRGBColorSpace,
 } from "three";
+import { surface, hazardMaterial } from './textures.js';
 import { PALETTE } from "./palette.js";
 // Original tidal relay architecture: turbine crowns and suspended copper transmission bus.
 export function createScenery(scene) {
   const mat = {};
   for (const key of Object.keys(PALETTE))
-    mat[key] = new MeshStandardMaterial({ color: PALETTE[key], roughness: 0.72, metalness: 0.18 });
+    mat[key] = surface(key,'metal',2);
   function block(w, h, d, x, y, z, color) {
     const m = new Mesh(new BoxGeometry(w, h, d), mat[color]);
     m.position.set(x, y, z);
@@ -39,9 +41,10 @@ export function createScenery(scene) {
     ctx.textAlign = "center";
     ctx.font = "bold 72px monospace";
     ctx.fillText(text, 256, 123);
+    const texture = new CanvasTexture(c);texture.colorSpace=SRGBColorSpace;
     const m = new Mesh(
       new PlaneGeometry(4 * scale, 1.5 * scale),
-      new MeshBasicMaterial({ map: new CanvasTexture(c), side: DoubleSide }),
+      new MeshBasicMaterial({ map: texture, side: DoubleSide }),
     );
     m.position.set(x, y, z);
     m.rotation.y = rotation;
@@ -61,7 +64,7 @@ export function createScenery(scene) {
       block(0.12, 0.02, 1.7, x + dx, 0.05, z + dz * 0.75, c);
     }
     label(site ? "B / COIL" : "A / TIDE", x, 3.5, -17.7, c, 1.4);
-    const lamp = new PointLight(site ? "#ff9454" : "#ffe1a1", 65, 14, 2);
+    const lamp = new PointLight(site ? '#ff9454' : '#59dbe8', 100, 16, 2);
     lamp.position.set(x, 3, z); scene.add(lamp);
     block(1.2, 0.12, 0.3, x, 3.8, -17.4, "accent");
     const marking = label(site ? "B / COIL" : "A / TIDE", x, 0.065, z+1, c, 0.85);
@@ -71,6 +74,26 @@ export function createScenery(scene) {
     block(1.1, 0.08, 0.8, x + 2, 1.74, z - 1, "ink");
   }
   label("CROSSCUT", 0, 5, -17.72, "accent", 1.2);
+  // Recessed wall courses, expansion joints and protective footings.
+  for(let z=-16;z<18;z+=4) {
+    for(const x of [-15.7,15.7]) {
+      block(.16,4.7,.18,x,2.35,z,'dark');
+      block(.22,.24,3.8,x,.2,z+1.9,'dark');
+    }
+  }
+  for(const x of [-1.52,1.52]) for(let z=-2;z<6;z+=2)block(.04,.06,1.8,x,1.1,z,'muted');
+  const hazard=hazardMaterial();
+  for(const [x,z,w] of [[0,6.53,3],[0,-6.48,3],[12,7.03,2.4],[-10,-1.98,3]]) {
+    const strip=new Mesh(new BoxGeometry(w,.17,.018),hazard);strip.position.set(x,.24,z);scene.add(strip);
+  }
+  // Exterior silhouettes extend the industrial world beyond its playable walls.
+  for(let i=0;i<8;i++) {
+    const x=-23+i*7;
+    block(4,4+i%3*2,4,x,3,-24,'surface');
+    block(.7,9+i%3, .7,x+1,5,-25,'muted');
+  }
+  label('RESTRICTED / RELAY OPERATIONS',8.7,4.2,-17.68,'ink',.85);
+  label('07',-1.52,3,2,'ink',.7,-Math.PI/2);
   label("01 / TIDE", -8, 3, 17.72, "teal", 0.8, Math.PI);
   label("03 / COIL", 15.7, 3, 5, "rust", 0.7, -Math.PI/2);
   for(let i=0;i<10;i++) block(0.05,2.3,0.12,10.77,1.25,3.2+i*0.38,"accent");
@@ -111,6 +134,16 @@ export function createScenery(scene) {
   // Charge is visible only after planting, and pulses from the authoritative fuse.
   const charge = new Group();
   charge.add(new Mesh(new BoxGeometry(0.55, 0.22, 0.4), mat.dark));
+  for(let i=0;i<3;i++) {
+    const cell=new Mesh(new CylinderGeometry(.067,.067,.55,12),mat.rust);cell.rotation.x=Math.PI/2;cell.position.set(-.19+i*.19,.02,0);charge.add(cell);
+    const strap=new Mesh(new BoxGeometry(.58,.025,.045),mat.ink);strap.position.set(0,.105,-.17+i*.17);charge.add(strap);
+  }
+  const displayCanvas=document.createElement('canvas');displayCanvas.width=128;displayCanvas.height=64;
+  const displayContext=displayCanvas.getContext('2d');const displayTexture=new CanvasTexture(displayCanvas);displayTexture.colorSpace=SRGBColorSpace;
+  const display=new Mesh(new PlaneGeometry(.32,.16),new MeshBasicMaterial({map:displayTexture}));display.rotation.x=-Math.PI/2;display.position.set(0,.15,0);charge.add(display);
+  const antenna=new Mesh(new CylinderGeometry(.009,.009,.32,6),mat.dark);antenna.position.set(.24,.2,-.14);charge.add(antenna);
+  const chargeLight=new PointLight(PALETTE.accent,1.4,2);chargeLight.position.y=.3;charge.add(chargeLight);
+  let lastFuse=-1;
   const lamp = new Mesh(new BoxGeometry(0.25, 0.04, 0.2), new MeshBasicMaterial({ color: PALETTE.accent }));
   lamp.position.y = 0.14;
   charge.add(lamp);
@@ -120,6 +153,8 @@ export function createScenery(scene) {
       charge.visible = state.bomb.status === "planted";
       charge.position.set(state.bomb.x, 0.18, state.bomb.z);
       lamp.visible = Math.sin(state.elapsed * 12) > 0;
+      const fuse=Math.ceil(state.bomb.fuse);
+      if(fuse!==lastFuse){lastFuse=fuse;displayContext.fillStyle=PALETTE.dark;displayContext.fillRect(0,0,128,64);displayContext.fillStyle=PALETTE.accent;displayContext.font='bold 40px monospace';displayContext.textAlign='center';displayContext.fillText('00:'+String(fuse).padStart(2,'0'),64,46);displayTexture.needsUpdate=true;}
     },
   };
 }

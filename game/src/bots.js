@@ -189,6 +189,8 @@ export function createBots(scene, state, world, random, audio) {
     selected.armour -= absorbed;
     selected.health -= damage - absorbed;
     state.hit = 0.14;
+    const hitPoint = origin.clone().addScaledVector(dir, nearest);
+    world.effects?.burst(hitPoint, true);
     audio.hit();
     if (selected.health <= 0) {
       state.message = `YOU  /  ${weapon.name} ${headshot ? " / HEADSHOT" : ""}  /  SENTINEL`;
@@ -198,6 +200,7 @@ export function createBots(scene, state, world, random, audio) {
       state.money += 300;
       state.hit = 0.25;
     } else takeCover(selected);
+    return hitPoint;
   }
   function takeCover(b) {
     b.mode = "take-cover";

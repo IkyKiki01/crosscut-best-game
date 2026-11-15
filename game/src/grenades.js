@@ -1,5 +1,5 @@
 // Owns pooled grenade flight, smoke volumes, flash bursts and fragmentation damage.
-import { Vector3, Mesh, SphereGeometry, MeshStandardMaterial, MeshBasicMaterial, Group, Sprite, SpriteMaterial, CanvasTexture } from "three";
+import { Vector3, Mesh, SphereGeometry, MeshStandardMaterial, MeshBasicMaterial, Group, Sprite, SpriteMaterial, CanvasTexture, SRGBColorSpace } from "three";
 import { flashBots } from "./visibility.js";
 import { PALETTE } from "./palette.js";
 export function createGrenades(scene, state, world, audio) {
@@ -9,7 +9,17 @@ export function createGrenades(scene, state, world, audio) {
   const ctx = canvas.getContext("2d"), gradient = ctx.createRadialGradient(64,64,8,64,64,64);
   gradient.addColorStop(0,"rgba(177,193,189,1)"); gradient.addColorStop(0.55,"rgba(177,193,189,.95)"); gradient.addColorStop(1,"rgba(177,193,189,0)");
   ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
+  const pixels=ctx.getImageData(0,0,128,128);
+  for(let y=0;y<128;y++)for(let x=0;x<128;x++) {
+    const i=(y*128+x)*4;
+    const noise=(Math.sin(x*.12+Math.sin(y*.14)*3)+Math.cos(y*.17+Math.sin(x*.11)*2))*.5;
+    const shade=150+noise*26;
+    pixels.data[i]=shade;pixels.data[i+1]=shade+9;pixels.data[i+2]=shade+7;
+    pixels.data[i+3]*=.72+noise*.18;
+  }
+  ctx.putImageData(pixels,0,0);
   const smokeTexture = new CanvasTexture(canvas);
+  smokeTexture.colorSpace=SRGBColorSpace;
   for (let i = 0; i < 8; i++) {
     const mesh = new Mesh(new SphereGeometry(0.1, 8, 6), new MeshStandardMaterial({ color: PALETTE.accent }));
     scene.add(mesh);

@@ -663,7 +663,8 @@ class GTAOPass extends Pass {
 
 		scene.traverse( function ( object ) {
 
-			if ( ( object.isPoints || object.isLine || object.isLine2 ) && object.visible ) {
+			// Transparent VFX must not write opaque silhouettes into the AO normal buffer.
+			if ( ( object.isPoints || object.isLine || object.isLine2 || object.isSprite || object.material?.transparent ) && object.visible ) {
 
 				object.visible = false;
 				cache.push( object );

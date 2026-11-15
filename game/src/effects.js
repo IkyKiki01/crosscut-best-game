@@ -13,7 +13,10 @@ export function createEffects(scene) {
       add(m,velocity,kind==='spark'?.28:.65);
     }
   }
-  return {burst,shot(start,end){
+  return {reset(){
+    for(const e of active){group.remove(e.mesh);if(e.mesh.geometry!==sphere)e.mesh.geometry.dispose();e.mesh.material.dispose();}
+    active.length=0;clock=0;previous=0;
+  },burst,shot(start,end){
     const d=new Vector3().subVectors(end,start);const m=new Mesh(new CylinderGeometry(.008,.008,d.length(),5),materials.spark.clone());
     m.position.copy(start).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(new Vector3(0,1,0),d.normalize());add(m,new Vector3(),.09);
   },render(t){const dt=Math.max(0,Math.min(.05,t-previous));previous=t;clock+=dt;for(let i=active.length-1;i>=0;i--){const e=active[i],age=clock-e.born;if(age>e.life){group.remove(e.mesh);if(e.mesh.geometry!==sphere)e.mesh.geometry.dispose();e.mesh.material.dispose();active.splice(i,1);continue;}

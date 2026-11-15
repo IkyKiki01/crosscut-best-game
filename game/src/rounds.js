@@ -1,5 +1,6 @@
+import { createState } from "./state.js";
 // One round authority; first to five wins. A planted charge survives the round clock.
-export function createRounds(state, player, weapon, bots, objective, grenades) {
+export function createRounds(state, player, weapon, bots, objective, grenades, effects) {
   function reset() {
     state.health = 100;
     state.armour = Math.max(50, state.armour);
@@ -31,6 +32,7 @@ export function createRounds(state, player, weapon, bots, objective, grenades) {
     }
   }
   function step(dt) {
+    if (state.phase === "match") return;
     state.timer = Math.max(0, state.timer - dt);
     if (state.phase === "buy" && state.timer === 0) {
       state.phase = "live";
@@ -43,15 +45,20 @@ export function createRounds(state, player, weapon, bots, objective, grenades) {
       else if (bots.remaining() === 0 && state.health > 0) end(true);
       else if (state.timer === 0 && b.status !== "planted") end(false);
     } else if (state.timer === 0 && state.phase !== "buy") {
-      if (state.phase === "match") {
-        state.round = 0;
-        state.score.wins = 0;
-        state.score.losses = 0;
-        state.money = 3600;
-      }
       state.round++;
       reset();
     }
   }
-  return { reset, step };
+  function restart() {
+    const fresh = createState();
+    // Keep objects captured by player/weapon and the scene's actor/grenade pools.
+    const { player: p, weapon: w, bots: actors, grenades: pool } = state;
+    Object.assign(p, fresh.player);
+    Object.assign(w, fresh.weapon);
+    Object.assign(state, fresh, { player: p, weapon: w, bots: actors, grenades: pool });
+    for (const bot of actors) { bot.money = 600; bot.blind = 0; bot.visibleEnemy = false; }
+    effects?.reset();
+    reset();
+  }
+  return { reset, restart, step };
 }

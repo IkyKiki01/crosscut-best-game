@@ -4,9 +4,7 @@ import { PALETTE } from "./palette.js";
 // DOM presentation only; all timers and values come from the shared state.
 export function createHud(state) {
   const byId = (id) => document.getElementById(id);
-  const overlay = byId("overlay"),
-    play = byId("play"),
-    mag = byId("ammo-mag"),
+  const mag = byId("ammo-mag"),
     reserve = byId("ammo-reserve");
   const health = byId("health-value"),
     bar = byId("health-fill"),
@@ -35,9 +33,9 @@ export function createHud(state) {
       seconds = Math.ceil(state.bomb.status === "planted" ? state.bomb.fuse : state.timer);
     const b = state.bomb;
     armour.textContent = `AP ${Math.ceil(state.armour)} / G FRAG ${state.grenadeCount} / X SMOKE ${state.smokeCount} / F FLASH ${state.flashCount}${state.kit ? " / KIT" : ""}`;
-    bearing.hidden = state.damageFlash <= 0;
+    bearing.hidden = state.screen !== "playing" || state.damageFlash <= 0;
     bearing.style.transform = `translate(-50%,-50%) rotate(${state.damageAngle}rad)`;
-    board.hidden = !state.scoreboard;
+    board.hidden = state.screen !== "playing" || !state.scoreboard;
     if (state.scoreboard) board.innerHTML = `<h2>OPERATION / ROUND ${state.round}</h2><p>RAIDERS ${state.score.wins} : ${state.score.losses} SENTINELS</p><p>YOU · ${state.score.kills} KILLS · $${state.money}</p><hr>` + state.bots.map((bot,i)=>`<p>SENTINEL ${i+1} · ${bot.health>0 ? "ALIVE" : "DOWN"} · ${bot.buy} · ${bot.weapon} · $${bot.money} · ${bot.role}</p>`).join("");
     objective.textContent =
       b.status === "planted"
@@ -125,17 +123,5 @@ export function createHud(state) {
   }
   return {
     render,
-    onPlay(handler) {
-      play.addEventListener("click", handler);
-    },
-    setLocked(locked) {
-      overlay.hidden = locked;
-      if (!locked) {
-        byId("overlay-title").textContent = "Crosscut";
-        byId("overlay-copy").textContent =
-          "Plant a charge at the tide turbine (A) or capacitor relay (B). Protect it from defenders. Buy equipment between rounds.";
-        play.textContent = "Enter operation";
-      }
-    },
   };
 }

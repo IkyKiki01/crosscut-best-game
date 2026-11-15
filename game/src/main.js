@@ -16,6 +16,7 @@ import { createPlayer } from "./player.js";
 import { createWeapon } from "./weapon.js";
 import { createBots } from "./bots.js";
 import { createRounds } from "./rounds.js";
+import { createScreens } from "./screens.js";
 import { createHud } from "./hud.js";
 import { createAudio } from "./audio.js";
 import { createBuy } from "./buy.js";
@@ -65,15 +66,13 @@ const player = createPlayer(world, state, audio),
 const bots = createBots(scene, state, world, random, audio);
 const objective = createObjective(state, audio),
   grenades = createGrenades(scene, state, world, audio);
-const rounds = createRounds(state, player, weapon, bots, objective, grenades),
+const rounds = createRounds(state, player, weapon, bots, objective, grenades, effects),
   buy = createBuy(state, weapon);
 const hud = createHud(state);
-const input = createInput(renderer.domElement, (locked) => hud.setLocked(locked));
-hud.onPlay(() => {
-  audio.unlock();
-  input.requestLock();
-});
+let screens;
+const input = createInput(renderer.domElement, (locked) => screens?.lockChanged(locked));
 rounds.reset();
+screens = createScreens(state, rounds, input, audio);
 function syncCamera(alpha = 1) {
   const p = state.player;
   camera.position.lerpVectors(p.previous, p.position, alpha);
@@ -98,10 +97,11 @@ function frame(now) {
   requestAnimationFrame(frame);
   const dt = (now - lastTime) / 1000;
   lastTime = now;
-  const alpha = simulation.advance(dt, input.state.locked && !document.hidden);
+  const alpha = simulation.advance(dt, state.screen === "playing" && input.state.locked && !document.hidden);
   syncCamera(alpha);
   world.render(state);
   hud.render();
+  screens.render();
   atmosphere.render(state.elapsed);
   effects.render(state.elapsed);
   composer.render();
@@ -117,4 +117,4 @@ syncCamera();
 requestAnimationFrame(frame);
 
 // Tooling entry: browser checks inspect the actual live state and rendered scene.
-window.crosscut = { state, camera, renderer, scene, rounds, weapon, objective, bots, player, grenades };
+window.crosscut = { state, camera, renderer, scene, rounds, weapon, objective, bots, player, grenades, screens };

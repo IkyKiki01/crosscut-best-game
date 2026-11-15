@@ -116,6 +116,7 @@ export function createGrenades(scene, state, world, audio) {
           g.velocity.y = 1;
           g.velocity.normalize();
           if (world.wallDistance(p, g.velocity, d) < d - 0.5) continue;
+          state.stats.damage += Math.min(b.health, 140 * (1 - d / 6));
           b.health -= 140 * (1 - d / 6);
           if (b.health <= 0) {
             b.mode = "dead";

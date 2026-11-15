@@ -187,6 +187,7 @@ export function createBots(scene, state, world, random, audio) {
     const damage = weapon.damage * Math.max(0.6, 1 - nearest / 100) * (headshot ? weapon.head : 1);
     const absorbed = Math.min(selected.armour, damage * 0.35);
     selected.armour -= absorbed;
+    state.stats.damage += Math.min(selected.health, damage - absorbed);
     selected.health -= damage - absorbed;
     state.hit = 0.14;
     const hitPoint = origin.clone().addScaledVector(dir, nearest);

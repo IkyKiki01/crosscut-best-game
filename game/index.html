@@ -505,6 +505,22 @@
       #buy button { min-height:57px;margin:0;padding:14px;font-size:12px;background:linear-gradient(110deg,#2c454d90,#21373d50);border:1px solid #7a989b40;border-left:2px solid #42c5bf;align-items:center;text-align:left;gap:12px; }
       #buy button b { color:#ffb84b;white-space:nowrap; }
       body:has(#buy:not([hidden])) #game { filter:blur(5px); }
+      #overlay { background:linear-gradient(90deg,#091b24ed 0%,#102630b8 48%,#10263018 100%);place-items:center start;padding:60px 7vw; }
+      .briefing { width:min(650px,100%);border-left:3px solid #ffb84b;padding:10px 0 12px 30px; }
+      .eyebrow { font:11px var(--font-readout);letter-spacing:.23em;color:#65d5cf; }
+      .briefing h1 { font-size:clamp(42px,7vw,90px);letter-spacing:.08em;line-height:1;margin:22px 0 14px;font-weight:900; }
+      .briefing p { font-size:21px;color:#c1d2d2;margin:0 0 25px; }
+      .map-name { color:#ffb84b;font:14px var(--font-readout);letter-spacing:.15em;margin:20px 0; }
+      .screen-controls { display:grid;grid-template-columns:1fr 1fr;gap:12px 22px;margin:24px 0 32px;font:13px var(--font-readout);color:#b6c8cb; }
+      .screen-controls b { color:#fff;display:inline-block;min-width:68px; }
+      #screen-actions { display:flex;gap:12px;margin-top:16px; }
+      #screen-actions button { background:#18323d;color:#e9e6df;border:1px solid #7b969b;padding:12px 24px;cursor:pointer;font:13px var(--font-readout); }
+      #play { border-radius:0;font:14px var(--font-readout);letter-spacing:.1em;padding:18px 24px; }
+      .screen-footer { position:absolute;bottom:28px;left:7vw;right:7vw;color:#8aa8ad;font:10px var(--font-readout);letter-spacing:.18em;display:flex;justify-content:space-between; }
+      .result-score { font:70px var(--font-readout);color:#ffb84b;margin:18px 0; }
+      .result-stats { display:flex;gap:30px;margin:20px 0 30px;font:11px var(--font-readout);color:#9bb4bb; }
+      .result-stats b { display:block;color:#fff;font-size:28px;margin-bottom:8px; }
+      #hud[hidden] { display:none; }
     </style>
   </head>
   <body>
@@ -540,23 +556,15 @@
     </div>
 
     <div id="overlay" class="overlay">
-      <section class="panel" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
-        <h1 id="overlay-title">Crosscut</h1>
-        <p id="overlay-copy">
-          Sabotage the tidal power station. Plant at either relay and protect the charge. First to five rounds.
-        </p>
-        <button id="play" type="button">Click to play</button>
-        <ul class="keys">
-          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> Move</li>
-          <li><kbd>Shift</kbd> Walk quietly</li>
-          <li><kbd>Mouse</kbd> Look · <kbd>Esc</kbd> Pause</li>
-          <li><kbd>Click</kbd> Fire</li>
-          <li><kbd>R</kbd> Reload · <kbd>B</kbd> Open equipment requisition</li>
-          <li><kbd>Ctrl</kbd> Crouch</li>
-          <li><kbd>Space</kbd> Jump · <kbd>G</kbd> Frag grenade</li>
-          <li><kbd>E</kbd> Hold to plant at A or B</li>
-        </ul>
+      <section class="briefing" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+        <div class="eyebrow">TACTICAL SABOTAGE / OPERATION 07</div>
+        <h1 id="overlay-title">CROSSCUT</h1>
+        <p id="overlay-copy">Cut the power. Hold the line.</p>
+        <div id="screen-content"></div>
+        <button id="play" type="button">PRESS ENTER TO DEPLOY</button>
+        <div id="screen-actions"></div>
       </section>
+      <div class="screen-footer">RAIDERS / SENTINELS <span>FIRST TO FIVE · EVERY ROUND COUNTS</span></div>
     </div>
 
     <script type="importmap">

@@ -2,10 +2,13 @@
 import { Vector3 } from "three";
 export function createState() {
   return {
+    screen: "title",
+    stats: { shots: 0, hits: 0, damage: 0 },
     health: 100,
     armour: 75,
     money: 3600,
     round: 1,
+    lastWon: false,
     score: { wins: 0, losses: 0, kills: 0 },
     buyOpen: false,
     message: "",

@@ -58,6 +58,8 @@ export function createWeapon(camera, game, world, random, audio) {
   function fire(bots, player) {
     if (!ready()) return;
     state.mag--;
+    game.stats.shots++;
+    let connected = false;
     state.bloom = Math.min(0.04, state.bloom + 0.005);
     state.cooldown = WEAPONS[state.id].gap;
     state.flash = 0.065;
@@ -84,11 +86,13 @@ export function createWeapon(camera, game, world, random, audio) {
       }
       const wall = world.wallDistance(origin, direction);
       const hitPoint = bots.hit(origin, direction, wall, WEAPONS[state.id]);
+      if (hitPoint) connected = true;
       const end = hitPoint || origin.clone().addScaledVector(direction,wall);
       const muzzle = new Vector3(.24,-.16,-1).applyMatrix4(camera.matrixWorld);
       world.effects?.shot(muzzle,end);
       if (!hitPoint && wall < 100) world.effects?.burst(end);
     }
+    if (connected) game.stats.hits++;
     game.noise.x = origin.x;
     game.noise.z = origin.z;
     game.noise.radius = 35;

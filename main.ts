@@ -1,4 +1,4 @@
-// CROSSCUT submission packager. Node 22, standard library and the pinned local dossier helper.
+// Owns static game packaging, screenshot copying and judge dossier output.
 // Copies the static game and four browser renders, then writes the judge dossier.
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

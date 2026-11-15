@@ -1,4 +1,4 @@
-// Fixed simulation owns gameplay time. Rendering consumes the accumulator's interpolation.
+// Owns fixed-step gameplay time; rendering consumes accumulator interpolation.
 export function createSimulation(state, input, player, weapon, bots, rounds, buy, grenades, objective, syncCamera) {
   const STEP = 1 / 120;
   let accumulator = 0;

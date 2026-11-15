@@ -1,4 +1,4 @@
-// All mutable gameplay data lives beneath this single state tree.
+// Owns the mutable gameplay state tree and seeded random generator.
 import { Vector3 } from "three";
 export function createState() {
   return {

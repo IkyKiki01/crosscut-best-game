@@ -1,4 +1,4 @@
-// Deterministic, entirely local surface library. Colour textures are sRGB; normals are linear.
+// Owns deterministic local surface textures and cached materials.
 import { CanvasTexture, RepeatWrapping, SRGBColorSpace, MeshStandardMaterial, Vector2 } from 'three';
 import { PALETTE } from './palette.js';
 let seed = 923;

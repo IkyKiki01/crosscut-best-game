@@ -1,4 +1,4 @@
-// Attackers plant; defending bots rotate to the charge and must remain beside it to defuse.
+// Owns sabotage sites, planting, charge fuse and defuse progression.
 export const SITES = [
   { name: "A", x: -11, z: -12 },
   { name: "B", x: 10, z: -12 },

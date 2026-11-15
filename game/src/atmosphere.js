@@ -1,3 +1,4 @@
+// Owns the sky gradient and drifting ambient dust presentation.
 import { Mesh, SphereGeometry, ShaderMaterial, BackSide, BufferGeometry, Float32BufferAttribute, Points, PointsMaterial, Color } from 'three';
 import { PALETTE } from './palette.js';
 export function createAtmosphere(scene) {

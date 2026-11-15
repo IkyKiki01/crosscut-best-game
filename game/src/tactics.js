@@ -1,4 +1,4 @@
-// Owns persistent bot budgets, round buys and coordinated retake movement orders.
+// Owns persistent bot budgets, round buys and coordinated retake orders.
 import { ROUTES, NODES, nextNode } from "./navigation.js";
 export function equipBot(b, i, state) {
   b.money = Math.min(16000, (b.money ?? 600) + (state.round === 1 ? 0 : state.lastWon ? 1900 : 2700));

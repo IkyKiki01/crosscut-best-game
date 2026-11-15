@@ -1,4 +1,4 @@
-// Tidal station: blue mineral concrete, warm signal amber, oxidised copper.
+// Owns the tidal station color palette shared by scene and HUD.
 export const PALETTE = {
   canvas: "#789ca7",
   surface: "#264851",

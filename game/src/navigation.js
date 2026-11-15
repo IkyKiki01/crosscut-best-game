@@ -1,4 +1,4 @@
-// A connected waypoint graph. Route nodes sit in traversable corridors, not across cover.
+// Owns the connected waypoint graph, patrol routes and reusable BFS queries.
 export const NODES = [
   { x: -12, z: -13, links: [1] },
   { x: -12, z: -5, links: [0, 2, 7] },

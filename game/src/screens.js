@@ -1,4 +1,4 @@
-// Presentation owns navigation; simulation only advances while playing and locked.
+// Owns title, pause, results and navigation presentation.
 export function createScreens(state, rounds, input, audio) {
   const el = id => document.getElementById(id);
   let shown = '';

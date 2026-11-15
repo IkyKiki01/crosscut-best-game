@@ -1,3 +1,4 @@
+// Owns transient impact particles, tracers and their rendering lifecycle.
 import { Group, Mesh, SphereGeometry, MeshBasicMaterial, Vector3, CylinderGeometry, AdditiveBlending } from 'three';
 export function createEffects(scene) {
   const group=new Group();scene.add(group);const active=[];

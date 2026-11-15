@@ -1,5 +1,4 @@
-// Keyboard and mouse, and the pointer lock that turns the mouse into look. Plain browser
-// APIs only: the game asks the canvas for pointer lock and reads movementX/Y while it holds it.
+// Owns keyboard, mouse and pointer-lock input collection.
 export function createInput(canvas, onLockChange) {
   const keys = new Set(),
     pressed = new Set();

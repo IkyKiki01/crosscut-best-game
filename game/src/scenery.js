@@ -1,9 +1,8 @@
-// Owns authored industrial dressing, canvas wayfinding, site lamps and charge presentation.
+// Owns industrial dressing, wayfinding, site lamps and charge presentation.
 import {
   Mesh,
   BoxGeometry,
   CylinderGeometry,
-  MeshStandardMaterial,
   MeshBasicMaterial,
   CanvasTexture,
   PlaneGeometry,

@@ -1,4 +1,4 @@
-// Bootstrap and fixed 120 Hz simulation. Rendering never advances gameplay.
+// Owns application bootstrap and rendering; simulation advances in simulation.js.
 import { Color, WebGLRenderer, PCFShadowMap, REVISION, Scene, FogExp2, PerspectiveCamera, ACESFilmicToneMapping, SRGBColorSpace, Vector2 } from "three";
 import { EffectComposer } from '../vendor/addons/postprocessing/EffectComposer.min.js';
 import { RenderPass } from '../vendor/addons/postprocessing/RenderPass.min.js';

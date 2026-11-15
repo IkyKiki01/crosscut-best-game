@@ -1,5 +1,4 @@
-// One oscillator and one looping noise source, allocated on user activation only.
-// Envelopes synthesize rifle cracks, low reports and bright confirmation pings.
+// Owns synthesized weapon, hit and footstep audio and activation.
 export function createAudio() {
   let context, oscillator, gain, noiseGain;
   function unlock() {

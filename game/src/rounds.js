@@ -1,3 +1,4 @@
+// Owns round transitions, first-to-five scoring and match resets.
 import { createState } from "./state.js";
 // One round authority; first to five wins. A planted charge survives the round clock.
 export function createRounds(state, player, weapon, bots, objective, grenades, effects) {

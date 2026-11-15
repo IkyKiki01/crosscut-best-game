@@ -1,11 +1,10 @@
-// Map construction and allocation-free collision / sight queries.
+// Owns map construction and allocation-free collision and sight queries.
 import { createScenery } from "./scenery.js";
 import { surface } from './textures.js';
 import {
   Vector3,
   Group,
   Mesh,
-  MeshStandardMaterial,
   BoxGeometry,
   Box3,
   Ray,

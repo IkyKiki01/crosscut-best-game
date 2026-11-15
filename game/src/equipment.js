@@ -1,4 +1,4 @@
-// Immutable weapon definitions: each purchase changes damage, handling and capacity together.
+// Owns weapon definitions for purchase, damage, handling and capacity.
 export const WEAPONS = {
   rifle: {
     name: "Kestrel / rifle",

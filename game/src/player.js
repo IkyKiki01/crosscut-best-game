@@ -1,5 +1,4 @@
-// Player movement: acceleration, friction, gravity, crouch and jump, resolved as a box against
-// the world's colliders one axis at a time, so a wall never swallows the player.
+// Owns player look, recoil and collision-resolved movement.
 import { Vector3 } from "three";
 
 const STAND_HEIGHT = 1.72;

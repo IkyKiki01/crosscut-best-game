@@ -1,4 +1,4 @@
-// Route navigation, perception and combat. Hit volumes are vertical capsules, independent of rendering.
+// Owns sentinel navigation, perception, combat and damage resolution.
 import { Vector3 } from "three";
 import { createActors } from "./actors.js";
 import { createHitboxes } from "./hitboxes.js";

@@ -1,5 +1,4 @@
-// input.js — owns keyboard, mouse and pointer-lock collection, including the
-// discrete action buffer that survives a tap's keyup.
+// input.js — owns keyboard, mouse and pointer-lock collection, including the discrete action buffer.
 
 const DISCRETE_CODES = new Set([
   "KeyB",

@@ -1,5 +1,4 @@
-// simulation.js — owns the fixed-step gameplay clock; rendering consumes the
-// leftover accumulator as an interpolation factor.
+// simulation.js — owns the fixed-step gameplay clock; rendering consumes the interpolation remainder.
 
 const FIXED_STEP = 1 / 120;
 const MAX_FRAME_DELTA = 0.1;

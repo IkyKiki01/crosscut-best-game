@@ -1,5 +1,4 @@
-// visibility.js — owns the allocation-free perception queries shared by bots:
-// smoke line-of-sight denial and the flash cone blindness test.
+// visibility.js — owns smoke line-of-sight denial and flash-cone blindness queries.
 
 const SMOKE_BLOCK_RADIUS = 4;
 const SMOKE_BLOCK_RADIUS_SQUARED = SMOKE_BLOCK_RADIUS * SMOKE_BLOCK_RADIUS;

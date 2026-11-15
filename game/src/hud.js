@@ -1,5 +1,4 @@
-// hud.js — owns the DOM HUD, the radar, the damage bearing, the scoreboard and
-// the round banner. Every value it shows comes from the shared state.
+// hud.js — owns the DOM HUD, radar, damage bearing, scoreboard and round banner.
 import { WEAPONS } from "./equipment.js";
 import { PALETTE } from "./palette.js";
 
@@ -23,7 +22,7 @@ const RADAR_LABEL = { font: "bold 12px monospace", baselineY: 30, aX: 24, bX: 12
 
 const CROSSHAIR_BASE = 22;
 const CROSSHAIR_SPREAD_SCALE = 650;
-const DAMAGE_FLASH_SCALE = 2;
+const DAMAGE_FLASH_SCALE = 2.6;
 
 const SECONDS_PER_MINUTE = 60;
 const PLANT_PERCENT_BASE = 3;

@@ -1,5 +1,4 @@
-// actors.js — owns the sentinel mesh construction and the startup actor
-// records that bots.js mutates each round.
+// actors.js — owns sentinel meshes, rig parts and the startup actor records bots.js mutates.
 import {
   Group,
   Mesh,
@@ -82,6 +81,8 @@ function createSentinelMaterials() {
  */
 function buildSentinelMesh(materials, geometry) {
   const mesh = new Group();
+  // Yaw first so a hit flinch pitches relative to the sentinel's facing.
+  mesh.rotation.order = "YXZ";
 
   const body = new Mesh(geometry.body, materials.body);
   body.position.y = BODY_Y;
@@ -94,7 +95,7 @@ function buildSentinelMesh(materials, geometry) {
   const right = new Mesh(geometry.leg, materials.dark);
   right.position.set(BOOT_OFFSET_X, 0.3, 0);
   const flash = new Mesh(
-    new SphereGeometry(0.13, 5, 4),
+    new SphereGeometry(0.18, 6, 4),
     new MeshBasicMaterial({ color: PALETTE.accent }),
   );
   flash.position.set(MUZZLE_POSITION.x, MUZZLE_POSITION.y, MUZZLE_POSITION.z);
@@ -230,6 +231,7 @@ function registerSentinel(state, rig, index) {
     coverX: 0,
     coverZ: 0,
     flashTime: 0,
+    flinch: 0,
     gait: 0,
     lastX: 0,
     lastZ: 0,

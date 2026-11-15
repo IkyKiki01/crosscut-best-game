@@ -1,5 +1,4 @@
-// state.js — owns the mutable gameplay state tree and the seeded random
-// generator used by weapon spread and sentinel inaccuracy.
+// state.js — owns the mutable gameplay state tree and the seeded random generator.
 import { Vector3 } from "three";
 
 const START_HEALTH = 100;

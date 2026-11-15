@@ -1,5 +1,4 @@
-// grenades.js — owns the fixed grenade pool: throw ballistics, wall and floor
-// bounces, smoke volumes, flash bursts and fragmentation damage.
+// grenades.js — owns the fixed grenade pool: ballistics, bounces, smoke, flash and frag damage.
 import {
   Vector3,
   Mesh,

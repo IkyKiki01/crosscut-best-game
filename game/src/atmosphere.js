@@ -1,5 +1,4 @@
-// atmosphere.js — owns the sky gradient dome and the drifting ambient dust
-// layer that gives the relay its hazy depth.
+// atmosphere.js — owns the sky gradient dome and the drifting ambient dust field.
 import {
   Mesh,
   SphereGeometry,

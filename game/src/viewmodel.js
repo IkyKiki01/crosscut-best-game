@@ -1,5 +1,4 @@
-// viewmodel.js — owns the startup allocation of the first-person weapon mesh,
-// its muzzle flash sprite, its flash light and the gloved hands.
+// viewmodel.js — owns the first-person weapon mesh, muzzle flash, flash light and gloved hands.
 import {
   Group,
   Mesh,
@@ -22,11 +21,11 @@ const VIEWMODEL_OFFSET = { x: 0.24, y: -0.2, z: -0.42 };
 const MUZZLE_FLASH_OFFSET = { x: 0.24, y: -0.18, z: -0.95 };
 const FLASH_LIGHT_OFFSET = { x: 0.24, y: -0.16, z: -0.6 };
 const FLASH_LIGHT_RANGE = 5;
-const FLASH_SPHERE_RADIUS = 0.065;
+const FLASH_SPHERE_RADIUS = 0.095;
 const FLASH_SPHERE_WIDTH = 6;
 const FLASH_SPHERE_HEIGHT = 4;
-const FLASH_OPACITY = 0.9;
-const FLASH_SPRITE_SCALE = 0.4;
+const FLASH_OPACITY = 0.95;
+const FLASH_SPRITE_SCALE = 0.6;
 const FLASH_TEXTURE_SIZE = 128;
 const FLASH_TEXTURE_CENTER = 64;
 

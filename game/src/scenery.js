@@ -1,5 +1,4 @@
-// scenery.js — owns the industrial set dressing: site pads, signage, wall
-// courses, portal frames, turbines, service pipes, pylons and the charge prop.
+// scenery.js — owns industrial set dressing: site pads, signage, frames, turbines, pipes and pylons.
 import {
   Mesh,
   BoxGeometry,

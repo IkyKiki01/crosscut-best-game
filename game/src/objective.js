@@ -1,5 +1,4 @@
-// objective.js — owns the sabotage sites, the plant hold, the charge fuse and
-// the defuse progression driven by sentinels or the player's kit.
+// objective.js — owns sabotage sites, the plant hold, the charge fuse and defuse progression.
 const SITE_NAMES = ["A", "B"];
 const SITE_POSITIONS = [
   { x: -11, z: -12 },

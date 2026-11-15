@@ -1,5 +1,4 @@
-// tactics.js — owns the sentinels' persistent economy, their per-round buys
-// and the coordinated post-plant retake orders.
+// tactics.js — owns sentinel economy, per-round buys and coordinated post-plant retake orders.
 import { ROUTES, NODES, nextNode } from "./navigation.js";
 
 const MONEY_CAP = 16000;

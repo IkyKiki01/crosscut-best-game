@@ -1,5 +1,4 @@
-// equipment.js — owns the weapon catalogue: names, prices, magazine and
-// reserve capacity, damage profile, cadence, reload time and recoil feel.
+// equipment.js — owns the weapon catalogue: names, prices, capacity, damage, cadence and recoil.
 
 /**
  * Weapon definitions keyed by weapon id. Field names are consumed by buy.js,

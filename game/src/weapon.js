@@ -1,5 +1,4 @@
-// weapon.js — owns weapon handling: viewmodel sway, finite ammo, hitscan
-// resolution with pellet spread, recoil delivery and the reload animation.
+// weapon.js — owns viewmodel sway, finite ammo, hitscan spread, recoil and reload animation.
 import { WEAPONS } from "./equipment.js";
 import { Vector3 } from "three";
 import { createViewmodel } from "./viewmodel.js";

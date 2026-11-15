@@ -1,5 +1,4 @@
-// player.js — owns first-person look, recoil delivery, stance changes and the
-// collision-resolved movement of the raid party's point man.
+// player.js — owns first-person look, recoil, stance and collision-resolved movement.
 import { Vector3 } from "three";
 
 const STAND_HEIGHT = 1.72;

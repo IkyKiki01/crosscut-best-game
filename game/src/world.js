@@ -1,6 +1,4 @@
-// world.js — owns the relay map shell, its collision boxes and the
-// allocation-free overlap, sight and support queries used by movement, bots,
-// grenades and hit resolution.
+// world.js — owns the relay map shell, colliders and allocation-free overlap, sight and support queries.
 import { createScenery } from "./scenery.js";
 import { surface } from "./textures.js";
 import {
@@ -35,11 +33,14 @@ const CATWALK_STEP_STEP = 0.4;
 const REAR_STEP_X = 8;
 const REAR_STEP_START_Z = -10.9;
 
-const HEMISPHERE_SKY = "#b6d9ec";
-const HEMISPHERE_INTENSITY = 1.3;
-const SUN_COLOR = "#ffe1ab";
-const SUN_INTENSITY = 3.1;
+const HEMISPHERE_SKY = "#9fc8dd";
+const HEMISPHERE_INTENSITY = 1.0;
+const SUN_COLOR = "#ffe6b6";
+const SUN_INTENSITY = 3.9;
 const SUN_POSITION = { x: -15, y: 23, z: 8 };
+const FILL_COLOR = "#93c9de";
+const FILL_INTENSITY = 0.8;
+const FILL_POSITION = { x: 14, y: 10, z: -6 };
 const SUN_SHADOW_MAP = 2048;
 const SUN_SHADOW_EXTENT = 25;
 const SUN_SHADOW_FAR = 70;
@@ -197,6 +198,11 @@ function buildLighting(scene) {
   sun.shadow.bias = SUN_SHADOW_BIAS;
   sun.shadow.radius = SUN_SHADOW_RADIUS;
   scene.add(sun);
+
+  // Cool east fill keeps the shadowed lane readable without flattening the key light.
+  const fill = new DirectionalLight(FILL_COLOR, FILL_INTENSITY);
+  fill.position.set(FILL_POSITION.x, FILL_POSITION.y, FILL_POSITION.z);
+  scene.add(fill);
 }
 
 /**

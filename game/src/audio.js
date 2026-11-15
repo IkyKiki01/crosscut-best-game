@@ -1,5 +1,4 @@
-// audio.js — owns the synthesized weapon, hit and footstep sounds and the
-// gesture-driven context unlock.
+// audio.js — owns synthesized weapon, hit and footstep cues and the gesture-driven context unlock.
 
 const OSCILLATOR_TYPE = "sawtooth";
 const NOISE_FILTER_FREQUENCY = 2800;

@@ -1,5 +1,4 @@
-// screens.js — owns the title, pause and results overlays plus the navigation
-// between them, including pointer-lock release and input clearing.
+// screens.js — owns the title, pause and results overlays and navigation between them.
 const TITLE_HEADING = "CROSSCUT";
 const TITLE_COPY = "Cut the power. Hold the line.";
 const TITLE_BUTTON = "PRESS ENTER TO DEPLOY";

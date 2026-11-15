@@ -1,5 +1,4 @@
-// textures.js — owns the deterministic procedural surface textures and the
-// material cache shared by the map shell and its industrial dressing.
+// textures.js — owns deterministic procedural surface textures and the shared material cache.
 import {
   CanvasTexture,
   RepeatWrapping,

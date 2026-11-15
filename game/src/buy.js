@@ -1,5 +1,4 @@
-// buy.js — owns the buy-phase requisition panel: catalogue, prices,
-// purchase resolution and the keyboard controls that drive it.
+// buy.js — owns the buy-phase requisition catalogue, purchase resolution and keyboard controls.
 import { WEAPONS } from "./equipment.js";
 
 const PANEL_HEADER =

@@ -1,5 +1,4 @@
-// hitboxes.js — owns the reusable ray primitives behind body-capsule and
-// head-sphere hit queries, allocated once at startup.
+// hitboxes.js — owns reusable ray primitives behind body-capsule and head-sphere queries.
 import { Ray, Sphere, Vector3 } from "three";
 
 const HEAD_HEIGHT_OFFSET = 1.65;

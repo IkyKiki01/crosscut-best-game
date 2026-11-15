@@ -1,5 +1,4 @@
-// bots.js — owns sentinel navigation, perception, engagement, cover seeking
-// and the damage resolution that connects hitscan to sentinel records.
+// bots.js — owns sentinel navigation, perception, engagement, cover and damage resolution.
 import { Vector3 } from "three";
 import { createActors } from "./actors.js";
 import { createHitboxes } from "./hitboxes.js";
@@ -43,6 +42,8 @@ const ALERT_REACTION_NOISE = 0.45;
 const ALERT_REACTION_SIGHT = 0.5;
 
 const MUZZLE_FLASH_SECONDS = 0.06;
+const FLINCH_SECONDS = 0.22;
+const FLINCH_TILT = 0.3;
 const INACCURACY_BASE = 0.1;
 const INACCURACY_STILL = 0.035;
 const BOT_DAMAGE = 12;
@@ -183,6 +184,8 @@ export function createBots(scene, state, world, random, audio) {
   function updateFlashAndDeath(bot, dt) {
     bot.flashTime = Math.max(0, bot.flashTime - dt);
     bot.flash.visible = bot.flashTime > 0;
+    bot.flinch = Math.max(0, bot.flinch - dt);
+    if (bot.mode !== "dead") bot.mesh.rotation.x = -FLINCH_TILT * (bot.flinch / FLINCH_SECONDS);
     if (bot.mode !== "dead") return false;
     bot.mesh.rotation.z = Math.min(DEATH_FALL_MAX, bot.mesh.rotation.z + dt * DEATH_FALL_RATE);
     return true;
@@ -469,6 +472,7 @@ export function createBots(scene, state, world, random, audio) {
     selected.armour -= absorbed;
     state.stats.damage += Math.min(selected.health, damage - absorbed);
     selected.health -= damage - absorbed;
+    selected.flinch = FLINCH_SECONDS;
     state.hit = HIT_FLASH_SECONDS;
 
     const hitPoint = origin.clone().addScaledVector(dir, nearest);

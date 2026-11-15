@@ -1,5 +1,4 @@
-// navigation.js — owns the connected waypoint graph, the patrol routes and
-// the reusable breadth-first routing query.
+// navigation.js — owns the waypoint graph, patrol routes and the breadth-first routing query.
 const NODE_LAYOUT = [
   { x: -12, z: -13, links: [1] },
   { x: -12, z: -5, links: [0, 2, 7] },

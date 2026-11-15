@@ -1,6 +1,6 @@
 [
-  { "name": "1-relay.jpg", "description": "East lane cover view with complete tactical HUD" },
-  { "name": "2-contact.jpg", "description": "Live hitscan exchange and return fire" },
-  { "name": "3-requisition.jpg", "description": "Full buy menu with frag, smoke, flash and half-time defuse kit" },
-  { "name": "4-charge.jpg", "description": "Planted charge timer, smoke sight denial and elevated A-site catwalk" }
+  { "name": "1-title.jpg", "description": "Title card over the live relay, map name and controls legible" },
+  { "name": "2-play.jpg", "description": "Mid-round lane control with readable HUD and a sentinel holding the cross-cut" },
+  { "name": "3-firefight.jpg", "description": "Close exchange: muzzle flash, tracer, blood impact, hit marker, damage vignette and flinching body" },
+  { "name": "4-results.jpg", "description": "Victory results with final score, rounds, kills, damage and accuracy" }
 ]

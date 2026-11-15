@@ -1,6 +1,4 @@
-// main.js — owns application bootstrap: renderer, scene, camera, post stack,
-// subsystem wiring, the frame loop and the tooling entry point. Simulation
-// itself advances in simulation.js.
+// main.js — owns bootstrap: renderer, scene, camera, post stack, subsystem wiring and frame loop.
 import {
   Color,
   WebGLRenderer,
@@ -19,6 +17,8 @@ import { GTAOPass } from "../vendor/addons/postprocessing/GTAOPass.min.js";
 import { UnrealBloomPass } from "../vendor/addons/postprocessing/UnrealBloomPass.min.js";
 import { SMAAPass } from "../vendor/addons/postprocessing/SMAAPass.min.js";
 import { OutputPass } from "../vendor/addons/postprocessing/OutputPass.min.js";
+import { ShaderPass } from "../vendor/addons/postprocessing/ShaderPass.min.js";
+import { BrightnessContrastShader } from "../vendor/addons/shaders/BrightnessContrastShader.min.js";
 import { createAtmosphere } from "./atmosphere.js";
 import { createEffects } from "./effects.js";
 import { PALETTE } from "./palette.js";
@@ -42,17 +42,18 @@ const MAX_PIXEL_RATIO = 2;
 const CAMERA_FOV = 74;
 const CAMERA_NEAR = 0.05;
 const CAMERA_FAR = 100;
-const TONE_MAPPING_EXPOSURE = 1.05;
-const FOG_DENSITY = 0.012;
+const TONE_MAPPING_EXPOSURE = 1.12;
+const FOG_DENSITY = 0.0085;
 const PCF_SHADOW_REVISION = 187;
 
-const AO_BLEND_INTENSITY = 0.55;
+const AO_BLEND_INTENSITY = 0.7;
 const AO_SAMPLES = 8;
 const AO_RADIUS = 0.35;
-const BLOOM_STRENGTH = 0.35;
-const BLOOM_RADIUS = 0.6;
-const BLOOM_THRESHOLD = 0.85;
+const BLOOM_STRENGTH = 0.5;
+const BLOOM_RADIUS = 0.55;
+const BLOOM_THRESHOLD = 0.9;
 const AO_DOWNSCALE = 2;
+const GRADE_CONTRAST = 0.09;
 
 const MAX_CAMERA_PITCH = 1.5;
 
@@ -107,6 +108,11 @@ composer.addPass(
 );
 composer.addPass(new SMAAPass());
 composer.addPass(new OutputPass());
+// Final grade separates the lit play space from the sky and the far walls.
+const grade = new ShaderPass(BrightnessContrastShader);
+grade.uniforms.brightness.value = 0;
+grade.uniforms.contrast.value = GRADE_CONTRAST;
+composer.addPass(grade);
 // AO is deliberately half-resolution; final colour and antialiasing stay full-resolution.
 ao.setSize(Math.ceil(innerWidth / AO_DOWNSCALE), Math.ceil(innerHeight / AO_DOWNSCALE));
 

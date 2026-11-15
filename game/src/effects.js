@@ -1,5 +1,4 @@
-// effects.js — owns the transient impact particles and tracer beams, their
-// pooling-free lifetime bookkeeping and their disposal.
+// effects.js — owns transient impact particles and tracer beams with pooled lifetime bookkeeping.
 import {
   Group,
   Mesh,
@@ -10,25 +9,29 @@ import {
   AdditiveBlending,
 } from "three";
 
-const SPARK_COLOR = "#ffcb76";
-const DUST_COLOR = "#a8ada0";
-const BLOOD_COLOR = "#9b2925";
+const SPARK_COLOR = "#ffd489";
+const DUST_COLOR = "#b6bcae";
+const BLOOD_COLOR = "#c92a22";
 
-const BURST_PARTICLE_COUNT = 17;
-const BURST_SPARK_COUNT = 8;
+const BURST_PARTICLE_COUNT = 22;
+const BURST_SPARK_COUNT = 9;
 const BURST_VELOCITY_SPREAD = 2;
 const BURST_VELOCITY_LIFT = 0.2;
 const BURST_SPAWN_OFFSET = 0.08;
-const SPARK_SCALE = 0.018;
-const DUST_SCALE_BASE = 0.035;
-const DUST_SCALE_JITTER = 0.035;
-const SPARK_LIFETIME = 0.28;
-const DUST_LIFETIME = 0.65;
+const SPARK_SCALE = 0.024;
+const DUST_SCALE_BASE = 0.042;
+const DUST_SCALE_JITTER = 0.04;
+const BLOOD_SCALE_BASE = 0.05;
+const BLOOD_SCALE_JITTER = 0.04;
+const IMPACT_FLASH_SCALE = 0.11;
+const IMPACT_FLASH_LIFETIME = 0.14;
+const SPARK_LIFETIME = 0.32;
+const DUST_LIFETIME = 0.7;
 const GRAVITY = 1.5;
 
-const TRACER_RADIUS = 0.008;
+const TRACER_RADIUS = 0.02;
 const TRACER_SEGMENTS = 5;
-const TRACER_LIFETIME = 0.09;
+const TRACER_LIFETIME = 0.18;
 const TRACER_AXIS = new Vector3(0, 1, 0);
 
 const MAX_FRAME_STEP = 0.05;
@@ -95,11 +98,19 @@ export function createEffects(scene) {
         (Math.random() - 0.5) * BURST_VELOCITY_SPREAD,
       );
       mesh.position.copy(point).addScaledVector(velocity, BURST_SPAWN_OFFSET);
-      mesh.scale.setScalar(
-        kind === "spark" ? SPARK_SCALE : DUST_SCALE_BASE + Math.random() * DUST_SCALE_JITTER,
-      );
+      let scale;
+      if (kind === "spark") scale = SPARK_SCALE;
+      else if (kind === "blood") scale = BLOOD_SCALE_BASE + Math.random() * BLOOD_SCALE_JITTER;
+      else scale = DUST_SCALE_BASE + Math.random() * DUST_SCALE_JITTER;
+      mesh.scale.setScalar(scale);
       add(mesh, velocity, kind === "spark" ? SPARK_LIFETIME : DUST_LIFETIME);
     }
+
+    // A single additive flare makes the impact read even at distance.
+    const flare = new Mesh(sharedSphere, materials.spark.clone());
+    flare.position.copy(point);
+    flare.scale.setScalar(IMPACT_FLASH_SCALE);
+    add(flare, new Vector3(), IMPACT_FLASH_LIFETIME);
   }
 
   /**

@@ -1,5 +1,4 @@
-// palette.js — owns the tidal-station colour vocabulary shared by the scene,
-// the scenery dressing, the particle systems and the DOM HUD.
+// palette.js — owns the tidal-station colour vocabulary shared by scene, scenery, particles and HUD.
 
 /**
  * Single source of truth for every colour the game draws with.
@@ -8,14 +7,14 @@
  * @type {Record<string, string>}
  */
 export const PALETTE = {
-  canvas: "#789ca7",
-  surface: "#264851",
-  hairline: "#385761",
-  ink: "#dfdfcc",
-  muted: "#7b9c9c",
-  accent: "#ffb84b",
-  teal: "#42c5bf",
-  rust: "#c9704c",
-  sky: "#9db8be",
-  dark: "#142c34",
+  canvas: "#6d96a2",
+  surface: "#1e3b45",
+  hairline: "#2c4a55",
+  ink: "#f5f1e7",
+  muted: "#8fb0b0",
+  accent: "#ffb23d",
+  teal: "#38d6cf",
+  rust: "#d97850",
+  sky: "#7b98a2",
+  dark: "#0d2128",
 };

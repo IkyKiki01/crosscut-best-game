@@ -1,5 +1,4 @@
-// rounds.js — owns round transitions, first-to-five scoring, the per-round
-// reset and the full-match restart.
+// rounds.js — owns round transitions, first-to-five scoring, per-round reset and match restart.
 import { createState } from "./state.js";
 
 const START_HEALTH = 100;
